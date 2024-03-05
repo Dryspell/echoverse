@@ -60,7 +60,7 @@ const NodeAsHandleFlow = () => {
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
         <ReactFlowProvider>
           <div
-            className="reactflow-wrapper"
+            className="reactflow-wrapper floatingedges"
             style={{ width: "80vw", height: "80vh" }}
           >
             <ReactFlow

@@ -13,6 +13,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@ngneat/falso": "^7.2.0",
     "@planetscale/database": "^1.16.0",
     "@prisma/adapter-planetscale": "^5.10.2",
     "@prisma/client": "^5.10.2",

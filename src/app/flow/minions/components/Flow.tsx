@@ -29,6 +29,7 @@ import FloatingConnectionLine from "./FloatingConnection";
 import MinionNode from "./MinionNode";
 import PlayerNode from "./PlayerNode";
 import MinionConnectionLine from "./MinionConnectionLine";
+import DestinationNode from "./DestinationNode";
 
 const edgeTypes = {
   floating: FloatingEdge,
@@ -36,7 +37,7 @@ const edgeTypes = {
 const nodeTypes = {
   minion: MinionNode,
   player: PlayerNode,
-  destination: MinionNode,
+  destination: DestinationNode,
 };
 
 const initialNodes = () => {

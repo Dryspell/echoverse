@@ -4,7 +4,13 @@ import { Handle, Position, type ReactFlowState, useStore } from "reactflow";
 const connectionNodeIdSelector = (state: ReactFlowState) =>
   state.connectionNodeId;
 
-function DestinationNode({ id, data }: { id: string; data: { label: string } }) {
+function DestinationNode({
+  id,
+  data,
+}: {
+  id: string;
+  data: { label: string };
+}) {
   // const connectionNodeId = useStore(connectionNodeIdSelector);
 
   // const isConnecting = !!connectionNodeId;
@@ -18,6 +24,7 @@ function DestinationNode({ id, data }: { id: string; data: { label: string } }) 
         // className="minionNodeBody"
         style={{
           background: "#FF7",
+          color: "#000",
           borderRadius: "50%",
           display: "flex",
           alignItems: "center",

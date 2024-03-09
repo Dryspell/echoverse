@@ -19,6 +19,8 @@ import ReactFlow, {
   type OnConnectStartParams,
   OnConnectEnd,
   getOutgoers,
+  getIncomers,
+  getConnectedEdges,
 } from "reactflow";
 import "reactflow/dist/style.css";
 
@@ -53,32 +55,108 @@ const initialNodes = () => {
   return [...playerNodes, ...minionNodes];
 };
 
+type Position = { x: number; y: number };
+const getSquareDistance = (startPosition: Position, endPosition: Position) => {
+  return (
+    (endPosition.x - startPosition.x) ** 2 +
+    (endPosition.y - startPosition.y) ** 2
+  );
+};
+const getNormalizedDirection = (
+  startPosition: Position,
+  endPosition: Position,
+) => {
+  const direction = {
+    x: endPosition.x - startPosition.x,
+    y: endPosition.y - startPosition.y,
+  };
+  const length = Math.sqrt(direction.x ** 2 + direction.y ** 2);
+  return {
+    x: direction.x / length,
+    y: direction.y / length,
+    length,
+  };
+};
+
+type NodeData = { label: string; toDelete?: boolean };
+const movementSpeed = 3;
+
 const Flow = ({ tick }: { tick: number }) => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const connectingNodeId = useRef<string | null>(null);
   const { screenToFlowPosition } = useReactFlow();
 
-  const [nodes, setNodes, onNodesChange] = useNodesState<{ label: string }>(
-    initialNodes(),
-  );
+  const [nodes, setNodes, onNodesChange] =
+    useNodesState<NodeData>(initialNodes());
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   const [destinationCount, setDestinationCount] = React.useState(0);
 
   React.useEffect(() => {
+    let newEdges = [...edges];
+    let hasDeleted = false;
+
     setNodes(
-      nodes.map((node) => {
-        if (node.type === "minion")
-          return {
-            ...node,
-            // position: {
-            //   x: Math.round(node.position.x + (Math.random() - 0.5) * 5),
-            //   y: Math.round(node.position.y + (Math.random() - 0.5) * 5),
-            // },
-          };
-        return node;
-      }),
+      nodes
+        .map((node) => {
+          if (node.type === "minion") {
+            const existingDestinationNode = getOutgoers(node, nodes, edges)[0];
+            if (existingDestinationNode) {
+              const normalizedDirection = getNormalizedDirection(
+                node.position,
+                existingDestinationNode.position,
+              );
+              if (normalizedDirection.length <= movementSpeed) {
+                existingDestinationNode.data.toDelete = true;
+                hasDeleted = true;
+                const incomers = getIncomers(
+                  existingDestinationNode,
+                  nodes,
+                  edges,
+                );
+                const outgoers = getOutgoers(
+                  existingDestinationNode,
+                  nodes,
+                  edges,
+                );
+                const connectedEdges = getConnectedEdges(
+                  [existingDestinationNode],
+                  edges,
+                );
+                const remainingEdges = newEdges.filter(
+                  (edge) => !connectedEdges.includes(edge),
+                );
+
+                const createdEdges = incomers.flatMap(({ id: source }) =>
+                  outgoers.map(({ id: target }) => ({
+                    id: `${source}->${target}`,
+                    source,
+                    target,
+                    type: "floating",
+                    style: { stroke: "#f13", strokeWidth: 3 },
+                    markerEnd: { type: MarkerType.Arrow },
+                  })),
+                );
+                newEdges = [...remainingEdges, ...createdEdges];
+              }
+              return {
+                ...node,
+                position: {
+                  x: Math.round(
+                    node.position.x + normalizedDirection.x * movementSpeed,
+                  ),
+                  y: Math.round(
+                    node.position.y + normalizedDirection.y * movementSpeed,
+                  ),
+                },
+              };
+            }
+          }
+          return node;
+        })
+        .filter((node) => !node.data.toDelete),
     );
+    hasDeleted && setEdges(newEdges);
   }, [tick]);
 
   const onConnect = useCallback(
@@ -148,19 +226,20 @@ const Flow = ({ tick }: { tick: number }) => {
           origin: [0.5, 0.0],
         };
 
-        setNodes((nds) =>
-          nds
+        setNodes((nodes) =>
+          nodes
             .filter((node) => node.id !== existingDestinationNode?.id)
             .concat(newNode),
         );
-        setEdges((eds) =>
-          eds
+        setEdges((edges) =>
+          edges
             .filter((edge) => edge.target !== existingDestinationNode?.id)
             .concat({
-              id,
+              id: `${connectingNodeId.current}<>${id}`,
               source: connectingNodeId.current!,
               target: id,
               type: "floating",
+              style: { stroke: "#f13", strokeWidth: 3 },
               markerEnd: { type: MarkerType.Arrow },
             }),
         );
@@ -171,6 +250,9 @@ const Flow = ({ tick }: { tick: number }) => {
     },
     [screenToFlowPosition, setNodes, setEdges, destinationCount],
   );
+  React.useEffect(() => {
+    console.log({ edges });
+  }, [edges]);
 
   return (
     <div

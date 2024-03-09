@@ -134,7 +134,7 @@ export function createMinionNodes({
     { length: minionCount },
     (_, i) => (i / minionCount - maxDistance / 2) / 2,
   );
-  console.log({ maxDistance, centeredAroundMiddle });
+  // console.log({ maxDistance, centeredAroundMiddle });
 
   const nodes: Node[] = Array.from({ length: nodesCount }, (_, i) => {
     return centeredAroundMiddle.map((offset, minionIndex) => {

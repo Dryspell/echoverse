@@ -18,7 +18,7 @@ export function Header() {
     <div className="border-b">
       <div className="container flex h-16 items-center justify-between">
         <Link className="link" href="/">
-          Thumbnail Rater
+          Promise Exchange
         </Link>
 
         <div className="flex gap-8">

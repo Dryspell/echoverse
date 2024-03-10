@@ -29,7 +29,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           <TRPCReactProvider>{children}</TRPCReactProvider>
-          <Footer />
+          {/* <Footer /> */}
         </Providers>
       </body>
     </html>

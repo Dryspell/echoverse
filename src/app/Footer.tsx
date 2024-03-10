@@ -7,18 +7,18 @@ export default function Footer() {
 				<div className="md:flex md:justify-between">
 					<div className="mb-6 md:mb-0">
 						<a
-							href="https://flowbite.com/"
+							href="https://Promise Exchange.com/"
 							className="flex items-center"
 						>
 							<Image
-								src="https://flowbite.com/docs/images/logo.svg"
+								src="https://Promise Exchange.com/docs/images/logo.svg"
 								className="h-8 me-3"
-								alt="FlowBite Logo"
+								alt="Promise Exchange Logo"
 								width={32}
 								height={32}
 							/>
 							<span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-								Flowbite
+								Promise Exchange
 							</span>
 						</a>
 					</div>
@@ -30,10 +30,10 @@ export default function Footer() {
 							<ul className="text-gray-500 dark:text-gray-400 font-medium">
 								<li className="mb-4">
 									<a
-										href="https://flowbite.com/"
+										href="https://Promise Exchange.com/"
 										className="hover:underline"
 									>
-										Flowbite
+										Promise Exchange
 									</a>
 								</li>
 								<li>
@@ -53,7 +53,7 @@ export default function Footer() {
 							<ul className="text-gray-500 dark:text-gray-400 font-medium">
 								<li className="mb-4">
 									<a
-										href="https://github.com/themesberg/flowbite"
+										href="https://github.com/themesberg/Promise Exchange"
 										className="hover:underline "
 									>
 										Github
@@ -93,10 +93,10 @@ export default function Footer() {
 					<span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
 						© 2023{" "}
 						<a
-							href="https://flowbite.com/"
+							href="https://Promise Exchange.com/"
 							className="hover:underline"
 						>
-							Flowbite™
+							Promise Exchange™
 						</a>
 						. All Rights Reserved.
 					</span>

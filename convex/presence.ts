@@ -1,3 +1,6 @@
+import { v } from "convex/values";
+import { query, mutation } from "./_generated/server";
+
 /**
  * Functions related to reading & writing presence data.
  *
@@ -7,8 +10,6 @@
  * - Use Convex `auth` to authenticate users rather than passing up a "user"
  * - Check that the user is allowed to be in a given room.
  */
-import { v } from "convex/values";
-import { query, mutation } from "./_generated/server";
 
 const LIST_LIMIT = 20;
 

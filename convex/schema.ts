@@ -15,7 +15,15 @@ export default defineSchema({
     .index("by_token", ["tokenIdentifier"])
     .index("by_userid", ["id"])
     .index("by_subscriptionId", ["subscriptionId"]),
-    
+
+  rooms: defineTable({
+    id: v.string(),
+    name: v.string(),
+    description: v.string(),
+    startTime: v.number(),
+    endTime: v.optional(v.number()),
+  }),
+
   presence: defineTable({
     user: v.string(),
     room: v.string(),

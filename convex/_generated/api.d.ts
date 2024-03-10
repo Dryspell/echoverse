@@ -15,6 +15,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as presence from "../presence.js";
+import type * as rooms from "../rooms.js";
 import type * as stripe from "../stripe.js";
 import type * as users from "../users.js";
 import type * as utils from "../utils.js";
@@ -29,6 +30,7 @@ import type * as utils from "../utils.js";
  */
 declare const fullApi: ApiFromModules<{
   presence: typeof presence;
+  rooms: typeof rooms;
   stripe: typeof stripe;
   users: typeof users;
   utils: typeof utils;

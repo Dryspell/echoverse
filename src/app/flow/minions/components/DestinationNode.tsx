@@ -5,7 +5,7 @@ const connectionNodeIdSelector = (state: ReactFlowState) =>
   state.connectionNodeId;
 
 function DestinationNode({
-  id,
+  // id,
   data,
 }: {
   id: string;

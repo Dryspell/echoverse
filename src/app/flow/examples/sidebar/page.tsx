@@ -41,6 +41,7 @@ export default function FlowPage() {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const onConnect = useCallback(
     (params: Edge | Connection) => setEdges((els) => addEdge(params, els)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 

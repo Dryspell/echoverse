@@ -92,6 +92,7 @@ const Flow = ({ tick }: { tick: number }) => {
 
   const [destinationCount, setDestinationCount] = React.useState(0);
 
+  //? This handles updates for each tick
   React.useEffect(() => {
     let newEdges = [...edges];
     let hasDeleted = false;

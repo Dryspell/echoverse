@@ -33,7 +33,7 @@ const OLD_MS = 10000;
  *
  * @param room - The location associated with the presence data. Examples:
  * page, chat channel, game instance.
- * @param user - The user associated with the presence data.
+ * @param userId - The user associated with the presence data.
  * @param initialData - The initial data to associate with the user.
  * @param heartbeatPeriod? - If specified, the interval between heartbeats, in
  * milliseconds. A heartbeat updates the user's presence "updated" timestamp.
@@ -44,28 +44,28 @@ const OLD_MS = 10000;
  */
 export const usePresence = <T extends Record<string, Value>>(
   room: string,
-  user: string,
+  userId = "",
   initialData: T,
   heartbeatPeriod = HEARTBEAT_PERIOD,
 ) => {
   const [data, setData] = useState(initialData);
-  let presence: PresenceData<T>[] | undefined = useQuery(api.presence.list, {
+  const presence: PresenceData<T>[] | undefined = useQuery(api.presence.list, {
     room,
   });
-  if (presence) {
-    presence = presence.filter((p) => p.user !== user);
-  }
+
   const updatePresence = useSingleFlight(useMutation(api.presence.update));
   const heartbeat = useSingleFlight(useMutation(api.presence.heartbeat));
 
   useEffect(() => {
-    void updatePresence({ room, user });
-    const intervalId = setInterval(() => {
-      void heartbeat({ room, user });
-    }, heartbeatPeriod);
-    // Whenever we have any data change, it will get cleared.
-    return () => clearInterval(intervalId);
-  }, [updatePresence, heartbeat, room, user, data, heartbeatPeriod]);
+    if (userId && room) {
+      void updatePresence({ room, userId });
+      const intervalId = setInterval(() => {
+        void heartbeat({ room, userId });
+      }, heartbeatPeriod);
+      // Whenever we have any data change, it will get cleared.
+      return () => clearInterval(intervalId);
+    }
+  }, [updatePresence, heartbeat, room, userId, data, heartbeatPeriod]);
 
   // Updates the data, merged with previous data state.
   const updateData = useCallback((patch: Partial<T>) => {
@@ -74,7 +74,11 @@ export const usePresence = <T extends Record<string, Value>>(
     });
   }, []);
 
-  return [data, presence, updateData] as const;
+  // if (presence) {
+  //   presence = presence.filter((p) => p.user !== userId);
+  // }
+
+  return { data, presence, updateData };
 };
 
 /**

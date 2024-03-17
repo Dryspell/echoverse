@@ -8,6 +8,7 @@ import { type Doc } from "../../convex/_generated/dataModel";
 export default function useStableDbUser() {
   const { isAuthenticated } = useConvexAuth();
   const { user } = useUser();
+
   // When this state is set we know the server
   // has stored the user.
   const [dbUser, setDbUser] = useState<Doc<"users"> | null>(null);

@@ -4,48 +4,47 @@ import { getUsersByIdsUtil } from "./utils";
 
 const FREE_CREDITS = 5;
 
-
 export const setSubscriptionId = internalMutation({
-	args: {
-		userId: v.string(),
-		subscriptionId: v.string(),
-	},
-	handler: async (ctx, args) => {
-		const user = await ctx.db
-			.query("users")
-			.withIndex("by_userid", (q) => q.eq("id", args.userId))
-			.unique();
-		if (!user) {
-			throw new Error("User not found");
-		}
+  args: {
+    userId: v.string(),
+    subscriptionId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_userid", (q) => q.eq("id", args.userId))
+      .unique();
+    if (!user) {
+      throw new Error("User not found");
+    }
 
-		return await ctx.db.patch(user._id, {
-			subscriptionId: args.subscriptionId,
-		});
-	},
+    return await ctx.db.patch(user._id, {
+      subscriptionId: args.subscriptionId,
+    });
+  },
 });
 
 export const updateSubscriptionBySubId = internalMutation({
-	args: {
-		subscriptionId: v.string(),
-		// subscriptionExpirey: v.number(),
-	},
-	handler: async (ctx, args) => {
-		const user = await ctx.db
-			.query("users")
-			.withIndex("by_subscriptionId", (q) =>
-				q.eq("subscriptionId", args.subscriptionId)
-			)
-			.unique();
-		if (!user) {
-			throw new Error("User not found");
-		}
+  args: {
+    subscriptionId: v.string(),
+    // subscriptionExpirey: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_subscriptionId", (q) =>
+        q.eq("subscriptionId", args.subscriptionId),
+      )
+      .unique();
+    if (!user) {
+      throw new Error("User not found");
+    }
 
-		return await ctx.db.patch(user._id, {
-			subscriptionId: args.subscriptionId,
-			// subscriptionExpirey: args.subscriptionExpirey,
-		});
-	},
+    return await ctx.db.patch(user._id, {
+      subscriptionId: args.subscriptionId,
+      // subscriptionExpirey: args.subscriptionExpirey,
+    });
+  },
 });
 
 /**
@@ -67,6 +66,7 @@ export const store = mutation({
     if (!identity) {
       throw new Error("Called storeUser without authentication present");
     }
+
     // Check if we've already stored this identity before.
     const user = await getUsersByIdsUtil(ctx, [identity.tokenIdentifier]).then(
       (res) => res[0],
@@ -86,8 +86,12 @@ export const store = mutation({
     // If it's a new identity, create a new `User`.
     const newUserData = {
       id: identity.subject,
-      name: identity.name!,
-      preferredUsername: identity.preferredUsername,
+      name: identity.name,
+      preferredUsername:
+        identity.preferredUsername ??
+        identity.nickname ??
+        identity.name ??
+        identity.subject.slice(0, 10),
       pictureUrl: identity.pictureUrl,
       tokenIdentifier: identity.tokenIdentifier,
       credits: FREE_CREDITS,

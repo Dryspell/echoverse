@@ -14,6 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import React from "react";
 import CreateRoomModal from "./CreateRoomModal";
 import { api } from "convex/_generated/api";
+import { formatDistance } from "date-fns";
 
 const RoomCard = ({
   onClick,
@@ -25,8 +26,8 @@ const RoomCard = ({
   return (
     <Card
       sx={{
-        width: 200,
-        height: 200,
+        width: 300,
+        height: 300,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -77,7 +78,35 @@ export default function RoomPage() {
           <AddIcon sx={{ width: "100%", height: "100%" }} />
         </RoomCard>
         {rooms.map((room) => (
-          <RoomCard key={room.id}>{room.name}</RoomCard>
+          <RoomCard
+            key={room.id}
+            onClick={() =>
+              typeof window !== undefined &&
+              window.open(`/rooms/${room.name}`, "_blank")
+            }
+          >
+            <Typography>{`Room: ${room.name}`}</Typography>
+            <Typography>{`Description: ${room.description}`}</Typography>
+            <Typography>
+              {`Start Time: ${formatDistance(
+                new Date(room.startTime),
+                new Date(),
+                {
+                  addSuffix: true,
+                },
+              )}`}
+            </Typography>
+            <Typography>
+              {`End Time: ${
+                room.endTime
+                  ? formatDistance(new Date(room.endTime), new Date(), {
+                      addSuffix: true,
+                    })
+                  : "No end time"
+              }`}
+            </Typography>
+            <Typography>{`Players: ${room.presence?.length ?? 0}`}</Typography>
+          </RoomCard>
         ))}
       </Masonry>
     </Container>

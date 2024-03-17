@@ -5,7 +5,7 @@ export default defineSchema({
   users: defineTable({
     id: v.string(),
     tokenIdentifier: v.string(),
-    name: v.string(),
+    name: v.optional(v.string()),
     preferredUsername: v.optional(v.string()),
     email: v.optional(v.string()),
     pictureUrl: v.optional(v.string()),
@@ -22,7 +22,9 @@ export default defineSchema({
     description: v.string(),
     startTime: v.number(),
     endTime: v.optional(v.number()),
-  }),
+  })
+    .index("by_roomId", ["id"])
+    .index("by_name", ["name"]),
 
   presence: defineTable({
     user: v.string(),

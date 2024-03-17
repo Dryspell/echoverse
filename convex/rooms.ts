@@ -30,6 +30,31 @@ export const list = query({
   },
 });
 
+export const getbyId = query({
+  args: { id: v.string() },
+  handler: async (ctx, args) => {
+    const room = await ctx.db
+      .query("rooms")
+      .withIndex("by_roomId", (q) => q.eq("id", args.id))
+      .unique();
+    return { ...room };
+  },
+});
+
+export const getByName = query({
+  args: { name: v.string() },
+  handler: async (ctx, args) => {
+    const room = await ctx.db
+      .query("rooms")
+      .withIndex("by_name", (q) => q.eq("name", args.name))
+      .unique();
+
+    if (!room) throw new Error("Room not found");
+
+    return room;
+  },
+});
+
 export const createRoom = mutation({
   args: {
     name: v.string(),

@@ -24,12 +24,12 @@ const LIST_LIMIT = 20;
  * @param user - The user associated with the presence data.
  */
 export const update = mutation({
-  args: { room: v.string(), user: v.string() },
+  args: { room: v.string(), userId: v.string() },
   handler: async (ctx, args) => {
     const existing = await ctx.db
       .query("presence")
       .withIndex("user_room", (q) =>
-        q.eq("user", args.user).eq("room", args.room),
+        q.eq("user", args.userId).eq("room", args.room),
       )
       .unique();
     if (existing) {
@@ -38,7 +38,7 @@ export const update = mutation({
       });
     } else {
       await ctx.db.insert("presence", {
-        user: args.user,
+        user: args.userId,
         room: args.room,
         updated: Date.now(),
       });
@@ -54,12 +54,12 @@ export const update = mutation({
  * @param user - The user associated with the presence data.
  */
 export const heartbeat = mutation({
-  args: { room: v.string(), user: v.string() },
+  args: { room: v.string(), userId: v.string() },
   handler: async (ctx, args) => {
     const existing = await ctx.db
       .query("presence")
       .withIndex("user_room", (q) =>
-        q.eq("user", args.user).eq("room", args.room),
+        q.eq("user", args.userId).eq("room", args.room),
       )
       .unique();
     if (existing) {

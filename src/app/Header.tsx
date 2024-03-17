@@ -3,8 +3,7 @@
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { ModeToggle } from "../components/ui/mode-toggle";
 import Link from "next/link";
-import useStableDbUser from "@/hooks/useStoreUserEffect";
-import { useRouter } from "next/navigation";
+import useStableDbUser from "@/hooks/useStableDbUser";
 import UpgradeSubscriptionButton from "@/components/UpgradeButton";
 
 export function Header() {

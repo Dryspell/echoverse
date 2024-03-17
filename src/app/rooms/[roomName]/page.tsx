@@ -1,7 +1,10 @@
 "use client";
+import { Skeleton, useTheme } from "@mui/material";
 import { api } from "convex/_generated/api";
 import { useQuery } from "convex/react";
 import { useRouter } from "next/navigation";
+import ChatBox from "~/components/Chat/ChatBox";
+import useDetailedQuery from "~/hooks/useDetailedQuery";
 import usePresence from "~/hooks/usePresence";
 import useStableDbUser from "~/hooks/useStableDbUser";
 
@@ -10,11 +13,15 @@ export default function GameRoomPage({
 }: {
   params: { roomName: string };
 }) {
+  const theme = useTheme();
   const router = useRouter();
   const user = useStableDbUser();
-  const room = useQuery(api.rooms.getByName, {
-    name: params.roomName ?? "",
-  });
+  const { data: room, isLoading: roomLoading } = useDetailedQuery(
+    api.rooms.getByName,
+    {
+      name: params.roomName ?? "",
+    },
+  );
   const { presence } = usePresence(room?.id ?? "", user?.id ?? "", {});
 
   if (!params.roomName) {
@@ -28,7 +35,7 @@ export default function GameRoomPage({
 
   return (
     <div>
-      <h1>GameRoom</h1>
+      {roomLoading ? <Skeleton /> : <>{room && <ChatBox roomId={room.id} />}</>}
       <div className="border-2 border-sky-200">
         <pre>{JSON.stringify({ user }, null, 2)}</pre>
       </div>

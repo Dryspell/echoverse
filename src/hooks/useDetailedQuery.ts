@@ -19,7 +19,7 @@ export default function useDetailedQuery<
     onQuery?: (queryParams: FunctionArgs<QueryType>) => void;
   },
 ) {
-  const queryResult = useQuery(query, ...queryParams);
+  const queryResult = useQuery(query, queryParams);
   const storedResult = useRef(queryResult);
   const [isLoading, setIsLoading] = React.useState(false);
 

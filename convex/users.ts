@@ -1,8 +1,28 @@
 import { v } from "convex/values";
 import { internalMutation, mutation } from "./_generated/server";
-import { getUsersByIdsUtil } from "./utils";
+import { getDbUserUtil, getUsersByIdsUtil } from "./utils";
+import { clerkClient } from "@clerk/clerk-sdk-node";
 
 const FREE_CREDITS = 5;
+
+export const createUser = internalMutation({
+  args: {
+    user: v.object({
+      id: v.string(),
+      name: v.string(),
+      preferredUsername: v.optional(v.string()),
+      pictureUrl: v.optional(v.string()),
+      tokenIdentifier: v.string(),
+      email: v.optional(v.string()),
+    }),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("users", {
+      ...args.user,
+      credits: FREE_CREDITS,
+    });
+  },
+});
 
 export const setSubscriptionId = internalMutation({
   args: {
@@ -62,15 +82,9 @@ export const updateSubscriptionBySubId = internalMutation({
 export const store = mutation({
   args: {},
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Called storeUser without authentication present");
-    }
+    const { identity, user } = await getDbUserUtil(ctx);
 
-    // Check if we've already stored this identity before.
-    const user = await getUsersByIdsUtil(ctx, [identity.tokenIdentifier]).then(
-      (res) => res[0],
-    );
+    console.log(identity, user);
 
     if (user) {
       // If we've seen this identity before but the name has changed, patch the value.
@@ -83,7 +97,7 @@ export const store = mutation({
       }
       return { ...user, ...patchData };
     }
-    // If it's a new identity, create a new `User`.
+
     const newUserData = {
       id: identity.subject,
       name: identity.name,

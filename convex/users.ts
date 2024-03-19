@@ -84,8 +84,6 @@ export const store = mutation({
   handler: async (ctx) => {
     const { identity, user } = await getDbUserUtil(ctx);
 
-    console.log(identity, user);
-
     if (user) {
       // If we've seen this identity before but the name has changed, patch the value.
       const patchData = {

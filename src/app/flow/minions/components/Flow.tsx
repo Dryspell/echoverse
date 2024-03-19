@@ -251,9 +251,6 @@ const Flow = ({ tick }: { tick: number }) => {
     },
     [screenToFlowPosition, setNodes, setEdges, destinationCount],
   );
-  React.useEffect(() => {
-    console.log({ edges });
-  }, [edges]);
 
   return (
     <div

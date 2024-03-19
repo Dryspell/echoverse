@@ -42,6 +42,7 @@
     "@trpc/react-query": "^10.45.2",
     "@trpc/server": "^10.45.2",
     "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
     "convex": "^1.10.0",
     "date-fns": "^3.5.0",
     "lucide-react": "^0.354.0",

@@ -18,20 +18,20 @@ export default function ChatMessage({
       spacing={1}
       sx={{ justify: side === "right" ? "flex-end" : "flex-start" }}
     >
-      {side === "left" && (
-        <Grid xs={1}>
-          <Avatar
-            src={avatar}
-            sx={(theme) => ({
-              width: theme.spacing(4),
-              height: theme.spacing(4),
-            })}
-          />
-        </Grid>
-      )}
-      <Grid xs={11}>
-        {messages.map((msg, i) => {
-          return (
+      {messages.map((msg, i) => (
+        <React.Fragment key={msg._id || i}>
+          <Grid xs={1}>
+            {side === "left" && i === messages.length - 1 && (
+              <Avatar
+                src={avatar}
+                sx={(theme) => ({
+                  width: theme.spacing(4),
+                  height: theme.spacing(4),
+                })}
+              />
+            )}
+          </Grid>
+          <Grid xs={10}>
             <Box
               key={msg._id || i}
               sx={{
@@ -43,7 +43,7 @@ export default function ChatMessage({
                 sx={(theme) => ({
                   padding: theme.spacing(1, 2),
                   borderRadius: 4,
-                  marginBottom: 4,
+                  marginBottom: theme.spacing(1),
                   display: "inline-block",
                   wordBreak: "break-word",
                   fontFamily:
@@ -80,14 +80,14 @@ export default function ChatMessage({
                 {msg.message}
               </Typography>
             </Box>
-          );
-        })}
-      </Grid>
-      {side === "right" && (
-        <Grid xs={1}>
-          <Avatar src={avatar} />
-        </Grid>
-      )}
+          </Grid>
+          <Grid xs={1}>
+            {side === "right" && i === messages.length - 1 && (
+              <Avatar src={avatar} />
+            )}
+          </Grid>
+        </React.Fragment>
+      ))}
     </Grid>
   );
 }

@@ -25,7 +25,11 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 
 import "../utils/styles.css";
-import { createCircularArrayOfNodes, createMinionNodes } from "../utils/utils";
+import {
+  createCircularArrayOfNodes,
+  createMinionNodes,
+  getNormalizedDirection,
+} from "../utils/utils";
 import FloatingEdge from "./FloatingEdge";
 import FloatingConnectionLine from "./FloatingConnection";
 import MinionNode from "./MinionNode";
@@ -53,29 +57,6 @@ const initialNodes = () => {
   });
 
   return [...playerNodes, ...minionNodes];
-};
-
-type Position = { x: number; y: number };
-const getSquareDistance = (startPosition: Position, endPosition: Position) => {
-  return (
-    (endPosition.x - startPosition.x) ** 2 +
-    (endPosition.y - startPosition.y) ** 2
-  );
-};
-const getNormalizedDirection = (
-  startPosition: Position,
-  endPosition: Position,
-) => {
-  const direction = {
-    x: endPosition.x - startPosition.x,
-    y: endPosition.y - startPosition.y,
-  };
-  const length = Math.sqrt(direction.x ** 2 + direction.y ** 2);
-  return {
-    x: direction.x / length,
-    y: direction.y / length,
-    length,
-  };
 };
 
 type NodeData = { label: string; toDelete?: boolean };

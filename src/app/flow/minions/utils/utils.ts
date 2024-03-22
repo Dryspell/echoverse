@@ -1,5 +1,36 @@
-import { Position, MarkerType, type Node, type Edge } from "reactflow";
+import {
+  Position as FlowPosition,
+  MarkerType,
+  type Node,
+  type Edge,
+} from "reactflow";
 import { randFirstName } from "@ngneat/falso";
+
+type Position = { x: number; y: number };
+export const getSquareDistance = (
+  startPosition: Position,
+  endPosition: Position,
+) => {
+  return (
+    (endPosition.x - startPosition.x) ** 2 +
+    (endPosition.y - startPosition.y) ** 2
+  );
+};
+export const getNormalizedDirection = (
+  startPosition: Position,
+  endPosition: Position,
+) => {
+  const direction = {
+    x: endPosition.x - startPosition.x,
+    y: endPosition.y - startPosition.y,
+  };
+  const length = Math.sqrt(direction.x ** 2 + direction.y ** 2);
+  return {
+    x: direction.x / length,
+    y: direction.y / length,
+    length,
+  };
+};
 
 // this helper function returns the intersection point
 // of the line between the center of the intersectionNode and the target node
@@ -46,19 +77,19 @@ function getEdgePosition(
   const py = Math.round(intersectionPoint.y);
 
   if (px <= nx + 1) {
-    return Position.Left;
+    return FlowPosition.Left;
   }
   if (px >= nx + (n.width ?? 0) - 1) {
-    return Position.Right;
+    return FlowPosition.Right;
   }
   if (py <= ny + 1) {
-    return Position.Top;
+    return FlowPosition.Top;
   }
   if (py >= (n.y ?? 0) + (n.height ?? 0) - 1) {
-    return Position.Bottom;
+    return FlowPosition.Bottom;
   }
 
-  return Position.Top;
+  return FlowPosition.Top;
 }
 
 // returns the parameters (sx, sy, tx, ty, sourcePos, targetPos) you need to create an edge
@@ -97,7 +128,7 @@ export function createCircularArrayOfNodes({
       id: `${i}`,
       data: { label: randFirstName() },
       position: { x, y },
-      type: "player"
+      type: "player",
     };
   });
   return nodes;

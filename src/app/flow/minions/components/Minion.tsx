@@ -2,9 +2,13 @@ import { type CSSProperties, type ReactNode } from "react";
 import styles from "./minion.module.css";
 
 export default function Minion({
+  headColor,
+  bodyColor,
   children,
   style,
 }: {
+  headColor?: string;
+  bodyColor?: string;
   children?: ReactNode;
   style?: CSSProperties;
 }) {
@@ -16,7 +20,7 @@ export default function Minion({
         <svg height={240} width={180}>
           <path
             d="m 10 90 q 0 -80 80 -80 q 80 0 80 80 q -10 90 -50 120 q -10 20 -30 20 q -20 0 -30 -20 q -40 -30 -50 -120"
-            fill="#916953"
+            fill={headColor ?? "#916953"}
             stroke="black"
             strokeWidth="8"
           />
@@ -42,7 +46,7 @@ export default function Minion({
         <svg height={380} width={260}>
           <path
             d="m 10 90 q 0 -80 80 -80 q 40 0 80 0 q 80 0 80 80 q 0 120 -40 240 q -20 40 -40 40 q -40 0 -70 0 q -20 0 -40 -40 q -50 -120 -50 -240"
-            fill="#aad3df"
+            fill={bodyColor ?? "#aad3df"}
             stroke="black"
             strokeWidth="8"
           />

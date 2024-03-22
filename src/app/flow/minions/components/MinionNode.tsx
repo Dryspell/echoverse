@@ -5,54 +5,65 @@ import Minion from "./Minion";
 const connectionNodeIdSelector = (state: ReactFlowState) =>
   state.connectionNodeId;
 
-function MinionNode({ id, data }: { id: string; data: { label: string } }) {
+function MinionNode({
+  id,
+  data,
+}: {
+  id: string;
+  data: { label: string; headColor?: string; bodyColor?: string };
+}) {
   const connectionNodeId = useStore(connectionNodeIdSelector);
 
   const isConnecting = !!connectionNodeId;
   const isTarget = connectionNodeId && connectionNodeId !== id;
 
   return (
-    <div>
-      <div
-        style={{
-          background: "#f32",
-          display: "flex",
-          alignItems: "center",
-          textAlign: "center",
-        }}
-      >
-        <div
-          // className="minionNodeBody"
-          style={{
-            background: "#FF7A59",
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            textAlign: "center",
-            padding: 10,
-            opacity: 0.8,
-          }}
-        >
-          <Minion style={{ scale: 0.1 }} />
-          {data.label}
-        </div>
-        {/* If handles are conditionally rendered and not present initially, you need to update the node internals https://reactflow.dev/docs/api/hooks/use-update-node-internals/ */}
-        {/* In this case we don't need to use useUpdateNodeInternals, since !isConnecting is true at the beginning and all handles are rendered initially. */}
-        {!isConnecting && (
-          <Handle
-            className="minionHandle"
-            position={Position.Right}
-            type="source"
-          />
-        )}
+    <div
+      style={{
+        position: "relative",
+        alignItems: "center",
+        textAlign: "center",
+        borderRadius: "50%",
+        opacity: 1,
+        width: 35,
+        height: 60,
+      }}
+    >
+      <Minion
+        headColor={data.headColor}
+        bodyColor={data.bodyColor}
+        style={{ scale: 0.1 }}
+      />
 
+      <div style={{ position: "absolute", top: 55 }}>{data.label}</div>
+      {!isConnecting && (
         <Handle
+          style={{
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            transform: "translate(-50%, -50%)",
+          }}
           className="minionHandle"
-          position={Position.Left}
-          type="target"
-          isConnectableStart={false}
+          position={Position.Right}
+          type="source"
         />
-      </div>
+      )}
+
+      <Handle
+        style={{
+          top: "50%",
+          left: "50%",
+          right: "auto",
+          bottom: "auto",
+          transform: "translate(-50%, -50%)",
+        }}
+        className="minionHandle"
+        position={Position.Left}
+        type="target"
+        isConnectableStart={false}
+      />
     </div>
   );
 }

@@ -20,26 +20,27 @@
 }
 
 .head {
-  height: 230px;
-  width: 160px;
+  /* height: 250px;
+  width: 250px; */
   z-index: 1;
   left: 40px;
 }
 
 .eyebrow {
-  top: 90px;
-  left: 30px;
+  /* top: 90px; */
+  /* left: 40px; */
   width: 30px;
-  transform: translate(5px);
+  transform: translate(-10px, -10px);
 }
 
 .eyebrow-right {
-  transform: translate(70px);
+   width: 30px;
+  transform: translate(-5px, -10px);
 }
 
 .eye {
   top: 100px;
-  left: 45px;
+  left: 55px;
   width: 15px;
   height: 15px;
   border-radius: 100%;
@@ -53,6 +54,6 @@
 
 .body {
   top: 170px;
-  height: 360px;
-  width: 240px;
+  height: 370px;
+  width: 250px;
 }

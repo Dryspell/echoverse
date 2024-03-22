@@ -21,23 +21,21 @@ function MinionNode({ id, data }: { id: string; data: { label: string } }) {
           textAlign: "center",
         }}
       >
-        <Minion style={{ scale: 0.1 }}>
-          <div
-            // className="minionNodeBody"
-            style={{
-              background: "#FF7A59",
-              borderRadius: "50%",
-              // position: "absolute",
-              display: "flex",
-              alignItems: "center",
-              textAlign: "center",
-              padding: 10,
-              opacity: 0, // 0.8,
-            }}
-          >
-            {data.label}
-          </div>
-        </Minion>
+        <div
+          // className="minionNodeBody"
+          style={{
+            background: "#FF7A59",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            textAlign: "center",
+            padding: 10,
+            opacity: 0.8,
+          }}
+        >
+          <Minion style={{ scale: 0.1 }} />
+          {data.label}
+        </div>
         {/* If handles are conditionally rendered and not present initially, you need to update the node internals https://reactflow.dev/docs/api/hooks/use-update-node-internals/ */}
         {/* In this case we don't need to use useUpdateNodeInternals, since !isConnecting is true at the beginning and all handles are rendered initially. */}
         {!isConnecting && (
